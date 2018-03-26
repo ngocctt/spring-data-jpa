@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>SalesPerson Management</title>
+    <script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/moment.js}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script th:src="@{/js/main.js}" type="text/javascript"></script>
+    <link th:href="@{/css/main.css}" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+</head>
+<body>
+<a href="?lang=en">English</a>
+<a href="?lang=vi">Vietnamese</a>
+<div class="salesPersonForm">
+    <form th:action="@{/salespeople}" th:object="${SalesPerson}" method="post">
+        <table>
+            <tr>
+                <td><label th:text="#{SalesPerson.salesPersonId}"></label></td>
+                <td>
+                    <input type="text" th:field="*{salesPersonId}" autofocus="autofocus" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('salesPersonId')}" th:errors="*{salesPersonId}"></span>
+                </td>
+
+                <td><label th:text="#{SalesPerson.status}"></label></td>
+                <td>
+                    <select th:field="*{status}" class="form-control">
+                        <option th:value="select" th:text="Select"></option>
+                        <option th:each="status : ${listStatus.entrySet()}"
+                                th:value="${status.key}" th:text="${status.value}">
+                        </option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label th:text="#{SalesPerson.firstName}"></label></td>
+                <td><input type="text" th:field="*{firstName}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                </td>
+                <td><label th:text="#{SalesPerson.description}"></label></td>
+                <td colspan="3" rowspan="4"><textarea th:field="*{description}" cols="55" class="form-control"></textarea></td>
+            </tr>
+            <tr>
+                <td><label th:text="#{SalesPerson.lastName}"></label> </td>
+                <td><input type="text" th:field="*{lastName}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label th:text="#{SalesPerson.address}"></label></td>
+                <td><input type="text" th:field="*{address}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label th:text="#{SalesPerson.itemLimit}"></label></td>
+                <td><input type="text" th:field="*{itemLimit}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('itemLimit')}" th:errors="*{itemLimit}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <input type="submit" value="Submit" name="submit" class="btn btn-default" style="width: 130px;">
+                    <input type="button" value="Search" name="search" id="btn-search" class="btn btn-default" style="width: 130px;">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div class="listSalesPeople" th:unless="${#lists.isEmpty(listSalesPeople)}">
+    <table class="tbl-sales-person tbl-table table table-bordered">
+        <thead>
+        <tr>
+            <th th:text="#{SalesPerson.salesPersonId}"></th>
+            <th th:text="#{SalesPerson.salesPersonName}"></th>
+            <th th:text="#{SalesPerson.address}"></th>
+            <th th:text="#{SalesPerson.status}"></th>
+            <th th:text="#{SalesPerson.itemLimit}"></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="salesPerson : ${listSalesPeople}">
+            <td th:text="${salesPerson.salesPersonId}"></td>
+            <td th:text="${salesPerson.lastName} + ' ' + ${salesPerson.firstName}"></td>
+            <td th:text="${salesPerson.address}"></td>
+            <td th:text="${salesPerson.status}"></td>
+            <td th:text="${salesPerson.itemLimit}"></td>
+            <td>
+                <a th:href="@{/salespeople/__${salesPerson.salesPersonId}__}"/> Show |
+                <a th:href="@{/salespeople/edit(salesPersonId=${salesPerson.salesPersonId})}"/> Edit |
+                <a th:href="@{/salespeople/delete(salesPersonId=${salesPerson.salesPersonId})}"/> Delete
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="container" style="margin:auto;width: 400px;">
+        <ul class="pagination">
+            <li><a th:href="@{/salespeople(page=0,size=5,sort=salesPersonId)}">First</a></li>
+            <li><a th:id="prev">Previous</a></li>
+            <li><a href="#"><input type="text" th:value="${currentPage}" style="width: 35px;height: 20px;text-align: center;"></a></li>
+            <li><a th:id="next">Next</a></li>
+            <li><a th:href="@{/salespeople(page=${lastPage},size=5,sort=salesPersonId)}">Last</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

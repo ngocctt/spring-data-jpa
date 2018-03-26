@@ -1,0 +1,40 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.org.akhikhl.gretty:gretty:2.0.0"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: "org.akhikhl.gretty"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+war {
+    baseName = 'spring-jpa-demo'
+    version = '1.0-SNAPSHOT'
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '5.0.3.RELEASE'
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.0.5.RELEASE'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.0.CR1'
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.8.Final'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
+    compile group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.0.9.RELEASE'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.9-rc'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.0'
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.9.v20180320'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
